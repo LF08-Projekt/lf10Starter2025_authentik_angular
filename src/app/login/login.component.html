@@ -1,0 +1,42 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>LF10 Employee Portal</h1>
+    <p class="subtitle">Melden Sie sich an, um fortzufahren</p>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+      <div class="form-group">
+        <label for="username">Benutzername</label>
+        <input 
+          type="text" 
+          id="username" 
+          formControlName="username"
+          placeholder="john"
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Passwort</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          placeholder="••••••••"
+          class="form-input"
+        />
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage()">
+        {{ errorMessage() }}
+      </div>
+
+      <button type="submit" class="login-button">
+        Anmelden
+      </button>
+    </form>
+
+    <div class="info-text">
+      <p>Hinweis: Sie werden zu Authentik weitergeleitet</p>
+    </div>
+  </div>
+</div>
