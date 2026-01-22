@@ -1,4 +1,4 @@
-import {Component, inject, input, signal, Signal, WritableSignal} from '@angular/core';
+import {Component, inject, input, signal, Signal, viewChild, ViewChild, WritableSignal} from '@angular/core';
 import {Qualification} from "../model/qualification";
 import {QualificationsDataService} from "../services/qualificationsData.service";
 import {FormField, form} from "@angular/forms/signals";
@@ -14,12 +14,15 @@ import { ConfirmationPopupComponent } from "../confirmation-popup/confirmation-p
   styleUrl: './qualification-list.component.css',
 })
 export class QualificationListComponent {
-  public qualifications: Signal<Qualification[]>;
+
+  private confirmationPopUp = viewChild.required(ConfirmationPopupComponent);
   private qualificationToEdit: WritableSignal<Qualification>;
+  public qualifications: Signal<Qualification[]>;
   public qualificationForm;
   public newQualificationForm;
   public newQualification: WritableSignal<Qualification>;
   public addNewQualification = false;
+  public popUpText =  signal("Das sollte hier nicht stehen");
 
   constructor(private qualificationsDataService: QualificationsDataService) {
     this.qualifications = this.qualificationsDataService.getQualifications();
@@ -73,4 +76,13 @@ export class QualificationListComponent {
     this.qualifications().splice(index, 1);
     this.qualificationsDataService.deleteQualification(qualificationToDelete);
   }
+
+  openDeletePopup(qualification: Qualification) {
+    this.confirmationPopUp().showMessage("Sicher das du das Löschen willst?", () => this.deleteQualification(qualification));
+  }
+
+  cancelNew() {
+    this.confirmationPopUp().showMessage("Sicher das du das erstellen Abbrechen willst?", () => this.abortNew());
+  }
+
 }

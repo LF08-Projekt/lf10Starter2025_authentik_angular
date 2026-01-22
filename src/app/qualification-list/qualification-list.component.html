@@ -1,3 +1,4 @@
+<app-confirmation-popup></app-confirmation-popup>
 <div class="container mt-5">
   <div class="row justify-content-end mb-5">
     <button class="btn btn-success col-2" (click)="startAddNewQualification()" >+ Qualifikation Anlegen</button>
@@ -23,7 +24,7 @@
               save
             </button>
             <button class="material-icons btn btn-sm btn-danger"
-                    (click)="abortNew()">
+                    (click)="cancelNew()">
               delete
             </button>
           </td>
@@ -53,7 +54,7 @@
               edit
             </button>
             <button class="material-icons btn btn-sm btn-danger ms-3"
-                    (click)="deleteQualification(qualification)">
+                    (click)="openDeletePopup(qualification)">
               delete
             </button>
           </td>
