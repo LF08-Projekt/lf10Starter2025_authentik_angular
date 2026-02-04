@@ -3,6 +3,7 @@ import {Qualification} from "../model/qualification";
 import {QualificationsDataService} from "../services/qualificationsData.service";
 import {FormField, form} from "@angular/forms/signals";
 import { ConfirmationPopupComponent } from "../confirmation-popup/confirmation-popup.component";
+import {setActiveConsumer} from "@angular/core/primitives/signals";
 
 @Component({
   selector: 'app-qualification-list',
@@ -24,6 +25,7 @@ export class QualificationListComponent {
   public addNewQualification = false;
   public popUpText =  signal("Das sollte hier nicht stehen");
   public error = "";
+  public filteredQualifications: Qualification[] = [];
 
   constructor(private qualificationsDataService: QualificationsDataService) {
     this.qualifications = this.qualificationsDataService.getQualifications();
@@ -83,9 +85,9 @@ export class QualificationListComponent {
 
   deleteQualification(qualificationToDelete: Qualification) {
     this.qualificationsDataService.qualificationHasEmployees(qualificationToDelete).subscribe( (result) => {
-      console.log(result);
       if (result.employees.length === 0) {
         this.qualificationsDataService.deleteQualification(qualificationToDelete);
+        this.filteredQualifications = [];
       } else {
         this.error = "Es gibt noch Mitarbeiter mit dieser Qualifikation"
       }
@@ -98,6 +100,18 @@ export class QualificationListComponent {
 
   cancelNew() {
     this.confirmationPopUp().showMessage("Sicher das du das erstellen Abbrechen willst?", () => this.abortNew());
+  }
+
+  filterQualifications(searchWord: string) {
+    this.filteredQualifications = []
+    if (searchWord == "") {
+      return
+    }
+    this.qualifications().map( (qualification) => {
+      if (qualification.skill.toLowerCase().includes(searchWord.toLowerCase())) {
+        this.filteredQualifications.push(qualification);
+      }
+    })
   }
 
 }

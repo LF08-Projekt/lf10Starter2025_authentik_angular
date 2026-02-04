@@ -13,6 +13,9 @@
     <th>
       Qualifikation
     </th>
+    <th>
+      <input #searchInput class="" type="text" (change)="filterQualifications(searchInput.value)" >
+    </th>
     <th class="text-end">
       Aktion
     </th>
@@ -23,6 +26,7 @@
           <td>
             <input type="text" [formField]="newQualificationForm.skill" />
           </td>
+          <td></td>
           <td class="text-end">
             <button class="material-icons btn btn-sm btn-success me-3"
                     (click)="saveNew()">
@@ -35,7 +39,7 @@
           </td>
         </tr>
       }
-      @for (qualification of qualifications(); track qualification.id) {
+      @for (qualification of ( filteredQualifications.length != 0 ? filteredQualifications : qualifications()); track qualification.id) {
         @if (isEditQualification(qualification)) {
           <tr>
             <td>
@@ -53,6 +57,7 @@
           <td>
             {{qualification.skill}}
           </td>
+          <td></td>
           <td class="text-end">
             <button class="material-icons btn btn-sm btn-warning"
                     (click)="startEdit(qualification)">
