@@ -95,7 +95,7 @@ export class QualificationListComponent {
   }
 
   isEditQualification(qualification: Qualification) {
-    if(this.qualificationToEdit() === qualification) {
+    if(this.qualificationToEdit().id === qualification.id) {
       return true;
     } else {
       return false;
