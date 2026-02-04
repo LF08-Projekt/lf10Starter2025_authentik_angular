@@ -4,6 +4,8 @@ import {Qualification} from '../model/qualification';
 import {PostQualificationDTO} from '../model/postQualificationDTO';
 import {Injectable} from '@angular/core';
 import {AuthService} from "../auth.service";
+import {Employee} from "../model/Employee";
+import {EmployeesByQualifikation} from "../model/EmployeesByQualifikation";
 
 @Injectable({providedIn: "root"})
 export class QualificationsApi {
@@ -39,12 +41,11 @@ export class QualificationsApi {
   postQualification(skill: string) {
     const token = this.authService.getAccessToken();
     const apiUrl = `${this.baseUrl}/qualifications`;
-    this.httpClient.post(apiUrl, {skill: skill}, {
+    return this.httpClient.post(apiUrl, {skill: skill}, {
       headers: new HttpHeaders()
         .set('Content-Type', 'application/json')
         .set('Authorization', `Bearer ${token}`),
-    }).pipe(catchError((err: HttpErrorResponse) => throwError(() => err)))
-      .subscribe();
+    }).pipe(catchError((err: HttpErrorResponse) => throwError(() => err)));
   }
 
   deleteQualification(qualificationToDelete: Qualification) {
@@ -56,6 +57,18 @@ export class QualificationsApi {
         .set('Authorization', `Bearer ${token}`),
     }).pipe(catchError((err: HttpErrorResponse) => throwError(() => err)))
       .subscribe();
+  }
+
+  getEmployeesByQualification(qualificationId: number) {
+    const token = this.authService.getAccessToken();
+    const apiUrl = `${this.baseUrl}/qualifications/${qualificationId}/employees`;
+    return this.httpClient.get<EmployeesByQualifikation>(apiUrl,
+      {headers: new HttpHeaders()
+          .set('Content-Type', 'application/json')
+          .set('Authorization', `Bearer ${token}`)
+      }).pipe(
+      catchError((err: HttpErrorResponse) => throwError(() => err))
+    );
   }
 
 }

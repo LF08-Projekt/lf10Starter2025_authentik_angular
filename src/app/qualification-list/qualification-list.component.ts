@@ -23,6 +23,7 @@ export class QualificationListComponent {
   public newQualification: WritableSignal<Qualification>;
   public addNewQualification = false;
   public popUpText =  signal("Das sollte hier nicht stehen");
+  public error = "";
 
   constructor(private qualificationsDataService: QualificationsDataService) {
     this.qualifications = this.qualificationsDataService.getQualifications();
@@ -59,8 +60,17 @@ export class QualificationListComponent {
   }
 
   saveNew() {
+    let qualificationExists: Boolean = false;
+    this.qualifications().map((qualification) => {
+      if (qualification.skill == this.newQualificationForm.skill().value()) {
+        qualificationExists = true
+      }
+    })
+    if (qualificationExists) {
+      this.error = "Es gibt bereits eine Qualification mit diesem Namen!"
+      return
+    }
     this.newQualification().skill = this.newQualificationForm.skill().value();
-    this.qualifications()?.push(this.newQualification())
     this.qualificationsDataService.postNewQualification(this.newQualification().skill);
     this.addNewQualification = false;
     this.newQualificationForm.skill().value.set("")
@@ -72,9 +82,14 @@ export class QualificationListComponent {
   }
 
   deleteQualification(qualificationToDelete: Qualification) {
-    const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
-    this.qualifications().splice(index, 1);
-    this.qualificationsDataService.deleteQualification(qualificationToDelete);
+    this.qualificationsDataService.qualificationHasEmployees(qualificationToDelete).subscribe( (result) => {
+      console.log(result);
+      if (result.employees.length === 0) {
+        this.qualificationsDataService.deleteQualification(qualificationToDelete);
+      } else {
+        this.error = "Es gibt noch Mitarbeiter mit dieser Qualifikation"
+      }
+    })
   }
 
   openDeletePopup(qualification: Qualification) {
