@@ -2,38 +2,10 @@
   <div class="login-card">
     <h1>LF10 Employee Portal</h1>
     <p class="subtitle">Melden Sie sich an, um fortzufahren</p>
-    
-    <form (submit)="$event.preventDefault(); onLogin()" class="login-form">
-      <div class="form-group">
-        <label for="username">Benutzername</label>
-        <input 
-          type="text" 
-          id="username" 
-          [formField]="loginForm.username"
-          placeholder="john"
-          class="form-input"
-        />
-      </div>
 
-      <div class="form-group">
-        <label for="password">Passwort</label>
-        <input 
-          type="password" 
-          id="password" 
-          [formField]="loginForm.password"
-          placeholder="••••••••"
-          class="form-input"
-        />
-      </div>
-
-      <div class="error-message" *ngIf="errorMessage()">
-        {{ errorMessage() }}
-      </div>
-
-      <button type="submit" class="login-button">
-        Anmelden
-      </button>
-    </form>
+    <button (click)="onLogin()" class="login-button">
+      Anmelden
+    </button>
 
     <div class="info-text">
       <p>Hinweis: Sie werden zu Authentik weitergeleitet</p>
