@@ -54,7 +54,16 @@ export class QualificationListComponent {
   public addNewQualification = false;
   public popUpText =  signal("Das sollte hier nicht stehen");
   public error = "";
-  public filteredQualifications: Qualification[] = [];
+  public filteredQualifications = computed(() => {
+    let output: Qualification[] = [];
+    this.qualifications().map((qualification) => {
+      if (qualification.skill.toLowerCase().includes(this.filterText().toLowerCase())) {
+        output.push(qualification);
+      }
+    })
+    return output;
+  });
+  public filterText = signal<string>("");
 
   public newQualificationEvent = output<Qualification>();
   public selectQualificationEvent = output<Qualification>();
@@ -114,6 +123,7 @@ export class QualificationListComponent {
 
   startAddNewQualification() {
     this.addNewQualification = true;
+    console.log(this.qualifications());
   }
 
   saveNew() {
@@ -156,16 +166,5 @@ export class QualificationListComponent {
     this.confirmationPopUp().showMessage("Sicher das du das erstellen Abbrechen willst?", () => this.abortNew());
   }
 
-  filterQualifications(searchWord: string) {
-    this.filteredQualifications = []
-    if (searchWord == "") {
-      return
-    }
-    this.qualifications().map( (qualification) => {
-      if (qualification.skill.toLowerCase().includes(searchWord.toLowerCase())) {
-        this.filteredQualifications.push(qualification);
-      }
-    })
-  }
-
+  protected readonly HTMLInputElement = HTMLInputElement;
 }

@@ -26,7 +26,7 @@ export class QualificationsDataService {
   }
 
   deleteQualification(qualificationToDelete: Qualification) {
-    this.qualificationApi.deleteQualification(qualificationToDelete);
+    this.qualificationApi.deleteQualification(qualificationToDelete).subscribe();
     const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
     this.qualifications().splice(index, 1);
   }

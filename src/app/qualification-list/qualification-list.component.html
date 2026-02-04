@@ -16,7 +16,13 @@
       Qualifikation
     </th>
     <th>
-      <input #searchInput class="" placeholder="Suche..." type="text" (change)="filterQualifications(searchInput.value)" >
+      <input
+        #searchInput
+        type="text"
+        placeholder="Suche..."
+        (input)="filterText.set(searchInput.value)"
+        (keydown.enter)="$event.preventDefault()"
+      />
     </th>
     <th class="">
       Aktion
@@ -45,7 +51,7 @@
           </td>
         </tr>
       }
-      @for (qualification of ( filteredQualifications.length != 0 ? filteredQualifications : qualifications()); track qualification.id) {
+      @for (qualification of ( filteredQualifications().length != 0 ? filteredQualifications() : qualifications()); track qualification.id) {
         @if (isEditQualification(qualification)) {
           <tr>
             <td>

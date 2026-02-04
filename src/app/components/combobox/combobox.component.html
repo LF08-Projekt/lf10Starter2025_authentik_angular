@@ -9,7 +9,7 @@
     placeholder="Tippen oder auswählen…"
   />
 
-  <mat-autocomplete #auto="matAutocomplete">
+  <mat-autocomplete #auto="matAutocomplete" class="bg-white">
     @for (option of filtered(); track option) {
       <mat-option [value]="option">
         {{ option }}

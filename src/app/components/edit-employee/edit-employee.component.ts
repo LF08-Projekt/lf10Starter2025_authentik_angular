@@ -29,9 +29,6 @@ export class EditEmployeeComponent {
 
   private confirmationPopUp = viewChild.required(ConfirmationPopupComponent);
   employee = signal<Employee>(this.NULLEMPLOYEE);
-  employeeSkillSet = computed(() => {
-    return this.employee().skillSet;
-  });
   allQualifications = signal<Qualification[]>([]);
 
   employeeForm = form(this.employee, (schemaPath) => {
@@ -103,6 +100,7 @@ export class EditEmployeeComponent {
       }))
       .subscribe(q => {
         this.allQualifications.set(q)
+        console.log(this.allQualifications());
         callback?.();
       });
   }
@@ -208,10 +206,12 @@ export class EditEmployeeComponent {
       .subscribe((dto) => {
         if (dto.skill != "") {
           this.fetchAllQualifications(() => {
-            const newEntry = this.allQualifications().find(q => q.skill === qualification.skill);
+            const newEntry = this.allQualifications().find(q => q.skill == dto.skill);
 
+            console.log(newEntry);
             if (newEntry != undefined) {
               this.employee().skillSet.push(newEntry);
+              this.employee.set(this.employee().copy());
             }
           })
         }
@@ -221,11 +221,12 @@ export class EditEmployeeComponent {
   onSelectQualification(qualification: Qualification) {
     console.log("selected");
     this.employee().skillSet.push(qualification);
-    this.employee.set(this.employee());
+    this.employee.set(this.employee().copy());
     this.unsavedChanges = true;
   }
 
   onDeleteQualification(qualification: Qualification) {
     this.employee().skillSet = this.employee().skillSet.filter(q => q.id != qualification.id);
+    this.employee.set(this.employee().copy());
   }
 }

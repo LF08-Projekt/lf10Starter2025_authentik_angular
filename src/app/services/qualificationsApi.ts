@@ -51,12 +51,11 @@ export class QualificationsApi {
   deleteQualification(qualificationToDelete: Qualification) {
     const token = this.authService.getAccessToken();
     const apiUrl = `${this.baseUrl}/qualifications/${qualificationToDelete.id}`;
-    this.httpClient.delete(apiUrl, {
+    return this.httpClient.delete(apiUrl, {
       headers: new HttpHeaders()
         .set('Content-Type', 'application/json')
         .set('Authorization', `Bearer ${token}`),
-    }).pipe(catchError((err: HttpErrorResponse) => throwError(() => err)))
-      .subscribe();
+    }).pipe(catchError((err: HttpErrorResponse) => throwError(() => err)));
   }
 
   getEmployeesByQualification(qualificationId: number) {

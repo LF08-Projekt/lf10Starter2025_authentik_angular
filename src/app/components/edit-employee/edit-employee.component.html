@@ -9,7 +9,12 @@
       <div class="card shadow-sm">
         <div class="card-body">
 
-          <h1 class="h4 mb-4">Mitarbeiter anlegen</h1>
+          @if (isNew()) {
+            <h1 class="h4 mb-4">Mitarbeiter anlegen</h1>
+          }
+          @else {
+            <h1 class="h4 mb-4">Mitarbeiter bearbeiten</h1>
+          }
 
           <form (submit)="$event.preventDefault()">
 
@@ -129,7 +134,7 @@
 
             <div class="p-3 rounded bg-light mb-1">
               <app-qualification-list
-                [qualifications]="employeeSkillSet()"
+                [qualifications]="employee().skillSet"
                 [maxBodyHeight]="'220px'"
                 (newQualificationEvent)="onNewQualificationEvent($event)"
                 (selectQualificationEvent)="onSelectQualification($event)"
@@ -142,15 +147,15 @@
               <button
                 type="button"
                 class="btn btn-outline-secondary"
-                (click)="delete()">
-                Löschen
+                (click)="cancel()">
+                Abbrechen
               </button>
 
               <button
                 type="button"
-                class="btn btn-outline-secondary"
-                (click)="cancel()">
-                Test
+                class="btn btn-danger"
+                (click)="delete()">
+                Löschen
               </button>
 
               <button

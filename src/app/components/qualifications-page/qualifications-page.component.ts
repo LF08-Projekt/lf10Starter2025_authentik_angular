@@ -27,7 +27,10 @@ export class QualificationsPageComponent {
 
   private fetchQualifications() {
     try {
-      this.qualificationsApi.getAllQualifications().subscribe(q => this.qualifications.set(q));
+      this.qualificationsApi.getAllQualifications().subscribe(q => {
+        this.qualifications.set(q)
+        console.log(this.qualifications());
+      });
     }
     catch(e) {
       // TODO: message box
@@ -62,8 +65,9 @@ export class QualificationsPageComponent {
   onDeleteQualification(qualification: Qualification) {
     this.qualificationsApi.getEmployeesByQualification(qualification.id).subscribe((result) => {
         if (result.employees.length === 0) {
-          this.qualificationsDataService.deleteQualification(qualification);
-          this.fetchQualifications();
+          this.qualificationsApi.deleteQualification(qualification).subscribe(() => {
+            this.fetchQualifications();
+          });
         } else {
           this.confirmationPopUp().showMessage("Es gibt noch Mitarbeiter mit dieser Qualifikation");
         }
