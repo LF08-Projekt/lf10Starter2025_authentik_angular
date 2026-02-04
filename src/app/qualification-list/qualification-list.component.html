@@ -1,12 +1,22 @@
 <app-confirmation-popup></app-confirmation-popup>
-<div class="container mt-5">
-  <div class="row justify-content-end mb-5">
+ <div class="row justify-content-end mb-5">
     <button type="button" class="btn btn-success col-2" (click)="startAddNewQualification()" >+ Qualifikation Anlegen</button>
   </div>
-  <table class="table table-bordered bg-white">
-    <thead class="table-secondary">
+  @if (error != "") {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ error }}
+      <button type="button" class="btn-close" (click)="error = '' " aria-label="Close"></button>
+    </div>
+  }
+  <div class="table-responsive">
+
+  <table class="table table-bordered table-striped table-active">
+    <thead class="">
     <th>
       Qualifikation
+    </th>
+    <th>
+      <input #searchInput class="" placeholder="Suche..." type="text" (change)="filterQualifications(searchInput.value)" >
     </th>
     <th class="text-end">
       Aktion
@@ -16,9 +26,13 @@
       @if (addNewQualification) {
         <tr>
           <td>
-<!--            <input type="text" [formField]="newQualificationForm.skill" />-->
-            <app-combobox [options]="missingQualifications()" (valueChanged)="newSkillInputChanged($event)"/>
+            @if (employeeContext()) {
+              <app-combobox [options]="missingQualifications()" (valueChanged)="newSkillInputChanged($event)"/>
+            } @else {
+              <input type="text" [formField]="newQualificationForm.skill"/>
+            }
           </td>
+          <td></td>
           <td class="text-end">
             <button type="button" class="btn btn-sm btn-success me-3"
                     (click)="saveNew()">
@@ -31,12 +45,13 @@
           </td>
         </tr>
       }
-      @for (qualification of qualifications(); track qualification.id) {
+      @for (qualification of ( filteredQualifications.length != 0 ? filteredQualifications : qualifications()); track qualification.id) {
         @if (isEditQualification(qualification)) {
           <tr>
             <td>
               <input type="text" [formField]="qualificationForm.skill" />
             </td>
+            <td></td>
             <td class="text-end">
               <button type="button" class="btn btn-sm btn-success"
                       (click)="saveEdit()">
@@ -49,6 +64,7 @@
           <td>
             {{qualification.skill}}
           </td>
+          <td></td>
           <td class="text-end">
             @if (canUpdateQualifications()) {
             <button type="button" class="btn btn-sm btn-warning"

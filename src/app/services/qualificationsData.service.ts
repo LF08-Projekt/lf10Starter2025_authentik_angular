@@ -1,8 +1,7 @@
 import {Qualification} from "../model/qualification";
 import {QualificationsApi} from "./qualificationsApi";
-import {map} from "rxjs";
 import {toSignal} from "@angular/core/rxjs-interop";
-import {Injectable, Signal} from "@angular/core";
+import {Injectable, signal, Signal} from "@angular/core";
 
 @Injectable({providedIn: "root"})
 export class QualificationsDataService {
@@ -21,11 +20,28 @@ export class QualificationsDataService {
   }
 
   postNewQualification(skill: string) {
-    this.qualificationApi.postQualification(skill);
+    this.qualificationApi.postQualification(skill).subscribe((result) => {
+      this.updateQualificationsList()
+    });
   }
 
   deleteQualification(qualificationToDelete: Qualification) {
     this.qualificationApi.deleteQualification(qualificationToDelete);
+    const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
+    this.qualifications().splice(index, 1);
+  }
+
+  qualificationHasEmployees(qualificationToDelete: Qualification) {
+    return this.qualificationApi.getEmployeesByQualification(qualificationToDelete.id);
+  }
+
+  updateQualificationsList() {
+    this.qualificationApi.getAllQualifications().subscribe( (result) => {
+      this.qualifications().splice(0, this.qualifications().length)
+      result.forEach((qualification) => {
+        this.qualifications().push(qualification);
+      })
+    });
   }
 
 }

@@ -55,9 +55,4 @@ export class QualificationsPageComponent {
       this.fetchQualifications();
     }
   }
-
-  onDeleteQualification(qualification: Qualification) {
-    this.qualificationsApi.deleteQualification(qualification);
-    this.fetchQualifications();
-  }
 }
