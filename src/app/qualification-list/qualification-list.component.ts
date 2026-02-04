@@ -40,6 +40,7 @@ export class QualificationListComponent {
   public qualifications = input.required<Qualification[]>();
   public canUpdateQualifications = input<boolean>(false);
   public employeeContext = input<boolean>(true);
+  public maxBodyHeight = input<string>('600px');
 
   protected missingQualifications = computed(() => {
     return this.allQualifications()

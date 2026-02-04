@@ -130,6 +130,7 @@
             <div class="p-3 rounded bg-light mb-1">
               <app-qualification-list
                 [qualifications]="employee().skillSet"
+                [maxBodyHeight]="'250px'"
                 (newQualificationEvent)="onNewQualificationEvent($event)"
                 (selectQualificationEvent)="onSelectQualification($event)"
                 (deleteQualificationEvent)="onDeleteQualification($event)"

@@ -8,10 +8,10 @@
       <button type="button" class="btn-close" (click)="error = '' " aria-label="Close"></button>
     </div>
   }
-  <div class="table-responsive text-center">
+  <div class="table-responsive text-center overflow-auto" [style.max-height]="maxBodyHeight()">
 
-  <table class="table table-striped table-hover">
-    <thead class="table-primary">
+  <table class="table table-striped table-hover mb-0">
+    <thead class="table-primary sticky-top bg-white">
     <th>
       Qualifikation
     </th>
