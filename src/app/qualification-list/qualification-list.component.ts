@@ -14,6 +14,7 @@ import {Qualification} from "../model/qualification";
 import {QualificationsDataService} from "../services/qualificationsData.service";
 import {FormField, form} from "@angular/forms/signals";
 import { ConfirmationPopupComponent } from "../confirmation-popup/confirmation-popup.component";
+import {setActiveConsumer} from "@angular/core/primitives/signals";
 import {catchError} from "rxjs";
 import {QualificationsApi} from "../services/qualificationsApi";
 import {MatFormField, MatLabel} from "@angular/material/input";
@@ -54,6 +55,8 @@ export class QualificationListComponent {
   public newQualification: WritableSignal<Qualification>;
   public addNewQualification = false;
   public popUpText =  signal("Das sollte hier nicht stehen");
+  public error = "";
+  public filteredQualifications: Qualification[] = [];
 
   public newQualificationEvent = output<Qualification>();
   public selectQualificationEvent = output<Qualification>();
@@ -128,6 +131,18 @@ export class QualificationListComponent {
       this.selectQualificationEvent.emit(existing);
     }
 
+    let qualificationExists: Boolean = false;
+    this.qualifications().map((qualification) => {
+      if (qualification.skill == this.newQualificationForm.skill().value()) {
+        qualificationExists = true
+      }
+    })
+    if (qualificationExists) {
+      this.error = "Es gibt bereits eine Qualification mit diesem Namen!"
+      return
+    }
+    this.newQualification().skill = this.newQualificationForm.skill().value();
+    this.qualificationsDataService.postNewQualification(this.newQualification().skill);
     this.addNewQualification = false;
     this.newQualificationForm.skill().value.set("")
   }
@@ -141,6 +156,14 @@ export class QualificationListComponent {
     const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
     this.qualifications().splice(index, 1);
     this.deleteQualificationEvent.emit(qualificationToDelete);
+    this.qualificationsDataService.qualificationHasEmployees(qualificationToDelete).subscribe( (result) => {
+      if (result.employees.length === 0) {
+        this.qualificationsDataService.deleteQualification(qualificationToDelete);
+        this.filteredQualifications = [];
+      } else {
+        this.error = "Es gibt noch Mitarbeiter mit dieser Qualifikation"
+      }
+    })
   }
 
   openDeletePopup(qualification: Qualification) {
@@ -149,6 +172,18 @@ export class QualificationListComponent {
 
   cancelNew() {
     this.confirmationPopUp().showMessage("Sicher das du das erstellen Abbrechen willst?", () => this.abortNew());
+  }
+
+  filterQualifications(searchWord: string) {
+    this.filteredQualifications = []
+    if (searchWord == "") {
+      return
+    }
+    this.qualifications().map( (qualification) => {
+      if (qualification.skill.toLowerCase().includes(searchWord.toLowerCase())) {
+        this.filteredQualifications.push(qualification);
+      }
+    })
   }
 
 }
