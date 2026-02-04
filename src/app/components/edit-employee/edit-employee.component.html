@@ -1,6 +1,6 @@
 <div class="container-fluid py-4">
   <app-confirmation-popup/>
-  <div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="d-flex justify-content-between align-items-center bg-light border-bottom px-3 py-2 mb-4">
     <app-menu [askToLeave]="true" (onLeave)="attemptToLeave($event)" />
   </div>
   <div class="row justify-content-center">
@@ -130,7 +130,7 @@
             <div class="p-3 rounded bg-light mb-1">
               <app-qualification-list
                 [qualifications]="employee().skillSet"
-                [maxBodyHeight]="'250px'"
+                [maxBodyHeight]="'220px'"
                 (newQualificationEvent)="onNewQualificationEvent($event)"
                 (selectQualificationEvent)="onSelectQualification($event)"
                 (deleteQualificationEvent)="onDeleteQualification($event)"
