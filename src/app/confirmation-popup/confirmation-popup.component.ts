@@ -1,4 +1,4 @@
-import {Component, effect, ElementRef, input, ViewChild, viewChild} from '@angular/core';
+import {Component, signal} from '@angular/core';
 
 @Component({
   selector: 'app-confirmation-popup',
@@ -9,24 +9,25 @@ import {Component, effect, ElementRef, input, ViewChild, viewChild} from '@angul
 export class ConfirmationPopupComponent {
 
   popUpText = "";
-  dialog = viewChild.required<ElementRef>('confirmationDialoge')
+  visible = signal(false);
   private confirmCallback?: () => void;
-  hasConfirmFunction (){
-    if (this.confirmCallback) {
-      return true;
-    }
-    else return false;
+
+  hasConfirmFunction() {
+    return !!this.confirmCallback;
   }
 
-  showMessage(message: string,onConfirm?: () => void) {
+  showMessage(message: string, onConfirm?: () => void) {
     this.popUpText = message;
     this.confirmCallback = onConfirm;
-    this.dialog().nativeElement.showModal();
+    this.visible.set(true);
   }
 
   confirmAction() {
     this.confirmCallback?.();
-    this.dialog().nativeElement.close();
+    this.close();
   }
 
+  close() {
+    this.visible.set(false);
+  }
 }
