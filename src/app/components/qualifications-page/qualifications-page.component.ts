@@ -1,23 +1,26 @@
-import {Component, signal, Signal, WritableSignal} from '@angular/core';
+import {Component, signal, Signal, viewChild, WritableSignal} from '@angular/core';
 import {QualificationsDataService} from "../../services/qualificationsData.service";
 import {Qualification} from "../../model/qualification";
 import {QualificationListComponent} from "../../qualification-list/qualification-list.component";
 import {QualificationsApi} from "../../services/qualificationsApi";
 import {MenuComponent} from "../menu/menu.component";
+import {ConfirmationPopupComponent} from "../../confirmation-popup/confirmation-popup.component";
 
 @Component({
   selector: 'app-qualifications-page',
   imports: [
     QualificationListComponent,
-    MenuComponent
+    MenuComponent,
+    ConfirmationPopupComponent
   ],
   templateUrl: './qualifications-page.component.html',
   styleUrl: './qualifications-page.component.css',
 })
 export class QualificationsPageComponent {
   qualifications= signal<Qualification[]>([]);
+  private confirmationPopUp = viewChild.required(ConfirmationPopupComponent);
 
-  constructor(private qualificationsApi: QualificationsApi) {
+  constructor(private qualificationsApi: QualificationsApi, private qualificationsDataService: QualificationsDataService) {
     console.log("fetch");
     this.fetchQualifications();
   }
@@ -54,5 +57,17 @@ export class QualificationsPageComponent {
 
       this.fetchQualifications();
     }
+  }
+
+  onDeleteQualification(qualification: Qualification) {
+    this.qualificationsApi.getEmployeesByQualification(qualification.id).subscribe((result) => {
+        if (result.employees.length === 0) {
+          this.qualificationsDataService.deleteQualification(qualification);
+          this.fetchQualifications();
+        } else {
+          this.confirmationPopUp().showMessage("Es gibt noch Mitarbeiter mit dieser Qualifikation");
+        }
+      }
+    );
   }
 }

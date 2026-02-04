@@ -118,25 +118,23 @@ export class QualificationListComponent {
 
   saveNew() {
     console.log(this.newQualification());
+
+    let qualificationExists= this.qualifications().find(q => q.skill === this.newQualification().skill);
+    if (qualificationExists != undefined) {
+      this.error = "Es gibt bereits eine Qualification mit diesem Namen!"
+      return
+    }
+
     const existing = this.allQualifications().find(q => q.skill === this.newQualification().skill);
     if (existing == undefined) {
       this.newQualificationEvent.emit(this.newQualification());
       this.addNewQualification = false;
     }
     else {
-      this.selectQualificationEvent.emit(existing);
+      this.selectQualificationEvent.emit(existing)
+      this.addNewQualification = false;
     }
 
-    let qualificationExists: Boolean = false;
-    this.qualifications().map((qualification) => {
-      if (qualification.skill == this.newQualificationForm.skill().value()) {
-        qualificationExists = true
-      }
-    })
-    if (qualificationExists) {
-      this.error = "Es gibt bereits eine Qualification mit diesem Namen!"
-      return
-    }
     this.newQualification().skill = this.newQualificationForm.skill().value();
     this.newQualificationForm.skill().value.set("")
   }
@@ -148,18 +146,6 @@ export class QualificationListComponent {
 
   deleteQualification(qualificationToDelete: Qualification) {
     this.deleteQualificationEvent.emit(qualificationToDelete);
-    this.qualificationsDataService.qualificationHasEmployees(qualificationToDelete).subscribe( (result) => {
-      if (result.employees.length === 0) {
-        this.qualificationsDataService.deleteQualification(qualificationToDelete);
-        const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
-        this.qualifications().splice(index, 1);
-        const allQIndex = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
-        this.allQualifications().splice(allQIndex, 1);
-        this.filteredQualifications = [];
-      } else {
-        this.error = "Es gibt noch Mitarbeiter mit dieser Qualifikation"
-      }
-    })
   }
 
   openDeletePopup(qualification: Qualification) {

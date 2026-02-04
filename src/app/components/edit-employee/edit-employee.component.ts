@@ -29,6 +29,9 @@ export class EditEmployeeComponent {
 
   private confirmationPopUp = viewChild.required(ConfirmationPopupComponent);
   employee = signal<Employee>(this.NULLEMPLOYEE);
+  employeeSkillSet = computed(() => {
+    return this.employee().skillSet;
+  });
   allQualifications = signal<Qualification[]>([]);
 
   employeeForm = form(this.employee, (schemaPath) => {
@@ -216,7 +219,9 @@ export class EditEmployeeComponent {
   }
 
   onSelectQualification(qualification: Qualification) {
+    console.log("selected");
     this.employee().skillSet.push(qualification);
+    this.employee.set(this.employee());
     this.unsavedChanges = true;
   }
 

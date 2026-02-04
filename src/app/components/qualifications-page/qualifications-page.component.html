@@ -1,13 +1,15 @@
 <div class="container-fluid py-4">
+  <app-confirmation-popup/>
 <!-- Kopfzeile -->
   <div class="d-flex justify-content-between align-items-center bg-light border-bottom px-3 py-2 mb-4">
-  <app-menu [currentPage]="'Qualifikationen'"/>
-</div>
-<app-qualification-list
-  [qualifications]="qualifications()"
-  [canUpdateQualifications]="true"
-  [employeeContext]="false"
-  (updateQualificationEvent)="onUpdateQualification($event)"
-  (newQualificationEvent)="onNewQualification($event)"
-  />
+    <app-menu [currentPage]="'Qualifikationen'"/>
+  </div>
+  <app-qualification-list
+    [qualifications]="qualifications()"
+    [canUpdateQualifications]="true"
+    [employeeContext]="false"
+    (updateQualificationEvent)="onUpdateQualification($event)"
+    (newQualificationEvent)="onNewQualification($event)"
+    (deleteQualificationEvent)="onDeleteQualification($event)"
+    />
 </div>
