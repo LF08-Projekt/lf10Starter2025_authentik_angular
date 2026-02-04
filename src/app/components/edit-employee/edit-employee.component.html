@@ -1,6 +1,8 @@
 <div class="container-fluid py-4">
   <app-confirmation-popup/>
-  <app-menu [askToLeave]="true" (onLeave)="attemptToLeave($event)" />
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <app-menu [askToLeave]="true" (onLeave)="attemptToLeave($event)" />
+  </div>
   <div class="row justify-content-center">
     <div class="col-12 col-lg-8">
 
@@ -9,10 +11,10 @@
 
           <h1 class="h4 mb-4">Mitarbeiter anlegen</h1>
 
-          <form>
+          <form (submit)="$event.preventDefault()">
 
             <!-- Vorname / Nachname -->
-            <div class="row mb-3">
+            <div class="row mb-1">
               <label class="col-sm-2 col-form-label" for="firstName">Vorname</label>
               <div class="col-sm-4">
                 <input
@@ -48,10 +50,10 @@
 
             <!-- Adresse -->
             <div class="p-3 rounded bg-light mb-4">
-              <h2 class="h6 mb-3 text-secondary">Adresse</h2>
+              <h2 class="h6 mb-1 text-secondary">Adresse</h2>
 
               <!-- Straße -->
-              <div class="row mb-3">
+              <div class="row mb-1">
                 <label class="col-sm-1 col-form-label" for="street">Straße</label>
                 <div class="col-sm-11">
                   <input
@@ -106,7 +108,7 @@
             </div>
 
             <!-- Telefon -->
-            <div class="row mb-4">
+            <div class="row mb-1">
               <label class="col-sm-2 col-form-label" for="phone">Telefon</label>
               <div class="col-sm-10">
                 <input
@@ -125,7 +127,7 @@
             </div>
 
 
-            <div class="p-3 rounded bg-light mb-4">
+            <div class="p-3 rounded bg-light mb-1">
               <app-qualification-list
                 [qualifications]="employee().skillSet"
                 (newQualificationEvent)="onNewQualificationEvent($event)"
