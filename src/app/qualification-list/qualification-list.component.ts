@@ -138,8 +138,6 @@ export class QualificationListComponent {
       return
     }
     this.newQualification().skill = this.newQualificationForm.skill().value();
-
-
     this.newQualificationForm.skill().value.set("")
   }
 
@@ -155,6 +153,8 @@ export class QualificationListComponent {
         this.qualificationsDataService.deleteQualification(qualificationToDelete);
         const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
         this.qualifications().splice(index, 1);
+        const allQIndex = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
+        this.allQualifications().splice(allQIndex, 1);
         this.filteredQualifications = [];
       } else {
         this.error = "Es gibt noch Mitarbeiter mit dieser Qualifikation"
