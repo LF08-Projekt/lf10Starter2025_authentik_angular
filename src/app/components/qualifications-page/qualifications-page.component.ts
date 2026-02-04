@@ -47,13 +47,10 @@ export class QualificationsPageComponent {
   }
 
   onUpdateQualification(qualification: Qualification) {
-    const index = this.qualifications().findIndex(q => q.id == qualification.id);
-    if (index != -1) {
-      this.qualifications()[index].skill = qualification.skill;
-    }
-
     try {
-      this.qualificationsApi.updateQualification(qualification.id, qualification.skill).subscribe();
+      this.qualificationsApi.updateQualification(qualification.id, qualification.skill).subscribe((result) => {
+        this.fetchQualifications();
+      });
     }
     catch (e) {
       // TODO: message box

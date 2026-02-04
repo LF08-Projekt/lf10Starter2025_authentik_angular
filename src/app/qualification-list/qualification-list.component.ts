@@ -1,24 +1,18 @@
 import {
   Component,
   computed,
-  inject,
   input,
   output,
   signal,
-  Signal,
   viewChild,
-  ViewChild,
   WritableSignal
 } from '@angular/core';
 import {Qualification} from "../model/qualification";
 import {QualificationsDataService} from "../services/qualificationsData.service";
 import {FormField, form} from "@angular/forms/signals";
 import { ConfirmationPopupComponent } from "../confirmation-popup/confirmation-popup.component";
-import {setActiveConsumer} from "@angular/core/primitives/signals";
 import {catchError} from "rxjs";
 import {QualificationsApi} from "../services/qualificationsApi";
-import {MatFormField, MatLabel} from "@angular/material/input";
-import {MatOption, MatSelect} from "@angular/material/select";
 import {ComboboxComponent} from "../components/combobox/combobox.component";
 
 @Component({
