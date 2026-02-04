@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { form, Field } from '@angular/forms/signals';
 import { Router } from '@angular/router';
@@ -7,7 +7,8 @@ import { EmployeeService } from "../services/employee.service";
 import { QualificationsApi } from "../services/qualificationsApi";
 import { Qualification } from "../model/qualification";
 import { AuthService } from "../auth.service";
-import {MenuComponent} from "../components/menu/menu.component";
+import { MenuComponent } from "../components/menu/menu.component";
+import { ConfirmationPopupComponent } from "../confirmation-popup/confirmation-popup.component";
 
 // Filterfelder für die Erweiterte Suche
 interface FilterState {
@@ -22,11 +23,13 @@ interface FilterState {
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, Field, MenuComponent],
+  imports: [CommonModule, Field, MenuComponent, ConfirmationPopupComponent],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.css'
 })
 export class EmployeeListComponent {
+
+  private confirmationPopup = viewChild.required(ConfirmationPopupComponent);
 
   // Daten vom Backend
   private employeesSignal = signal<Employee[]>([]);
@@ -170,18 +173,21 @@ export class EmployeeListComponent {
 
   // Mitarbeiter löschen nach Bestätigung
   deleteEmployee(employee: Employee): void {
-    if (!confirm(`Möchten Sie ${employee.firstName} ${employee.lastName} wirklich löschen?`)) return;
-
-    this.employeeService.deleteEmployee(employee).subscribe({
-      next: () => {
-        this.employeesSignal.update(list => list.filter(e => e.id !== employee.id));
-      },
-      error: (err) => {
-        console.error('Löschen fehlgeschlagen:', err);
-        this.errorMessage.set('Löschen fehlgeschlagen. Bitte erneut versuchen.');
-        setTimeout(() => this.errorMessage.set(''), 5000);
+    this.confirmationPopup().showMessage(
+      `Möchten Sie ${employee.firstName} ${employee.lastName} wirklich löschen?`,
+      () => {
+        this.employeeService.deleteEmployee(employee).subscribe({
+          next: () => {
+            this.employeesSignal.update(list => list.filter(e => e.id !== employee.id));
+          },
+          error: (err) => {
+            console.error('Löschen fehlgeschlagen:', err);
+            this.errorMessage.set('Löschen fehlgeschlagen. Bitte erneut versuchen.');
+            setTimeout(() => this.errorMessage.set(''), 5000);
+          }
+        });
       }
-    });
+    );
   }
 
   navigateToAdd(): void {
