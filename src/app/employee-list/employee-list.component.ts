@@ -59,6 +59,12 @@ export class EmployeeListComponent {
     skill: []
   });
 
+  // PLZ nur gültig wenn leer oder 1-5 Ziffern
+  postcodeInvalid = computed(() => {
+    const val = this.filterModel().postcode.trim();
+    return val.length > 0 && !/^\d{1,5}$/.test(val);
+  });
+
   // Anzahl aktiver Textfilter (für Lupe-Badge)
   textFilterCount = computed(() => {
     const f = this.activeFilters();

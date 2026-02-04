@@ -165,14 +165,16 @@
 
           <div class="mb-3">
             <label for="filterPostcode" class="form-label fw-bold">PLZ</label>
-            <input type="text" class="form-control" id="filterPostcode" [field]="filterForm.postcode" placeholder="z.B. 28217" />
+            <input type="text" class="form-control" id="filterPostcode" [field]="filterForm.postcode" placeholder="z.B. 28217"
+                   [class.is-invalid]="postcodeInvalid()" />
+            <div class="invalid-feedback">PLZ darf nur aus bis zu 5 Ziffern bestehen.</div>
           </div>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="resetFilters()">Zurücksetzen</button>
           <button type="button" class="btn btn-outline-secondary" (click)="closeFilterModal()">Abbrechen</button>
-          <button type="button" class="btn btn-primary" (click)="applyFilters()">Suchen</button>
+          <button type="button" class="btn btn-primary" (click)="applyFilters()" [disabled]="postcodeInvalid()">Suchen</button>
         </div>
       </div>
     </div>
