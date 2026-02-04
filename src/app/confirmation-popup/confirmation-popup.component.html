@@ -1,31 +1,23 @@
-<dialog #confirmationDialoge class="popup--center">
-  <div class="row text-center">
-    <div class="col">
-      <p>{{popUpText}}</p>
+@if (visible()) {
+  <div class="modal show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ hasConfirmFunction() ? 'Bestätigung' : 'Hinweis' }}</h5>
+          <button type="button" class="btn-close" (click)="close()"></button>
+        </div>
+        <div class="modal-body">
+          <p>{{ popUpText }}</p>
+        </div>
+        <div class="modal-footer">
+          @if (hasConfirmFunction()) {
+            <button type="button" class="btn btn-outline-secondary" (click)="close()">Nein</button>
+            <button type="button" class="btn btn-danger" (click)="confirmAction()">Ja</button>
+          } @else {
+            <button type="button" class="btn btn-primary" (click)="close()">Ok</button>
+          }
+        </div>
+      </div>
     </div>
   </div>
-  <div class="row">
-    @if (hasConfirmFunction()) {
-      <div class="col">
-        <button class="btn btn-sm btn-danger"
-          (click)="confirmAction()">
-          Ja
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn btn-sm btn-danger"
-        (click)="confirmationDialoge.close()">
-          Nein
-        </button>
-      </div>
-    }
-    @else {
-      <div class="col">
-        <button class="btn btn-sm btn-danger"
-                (click)="confirmationDialoge.close()">
-          Ok
-        </button>
-      </div>
-    }
-  </div>
-</dialog>
+}
