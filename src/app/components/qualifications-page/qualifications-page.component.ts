@@ -3,20 +3,22 @@ import {QualificationsDataService} from "../../services/qualificationsData.servi
 import {Qualification} from "../../model/qualification";
 import {QualificationListComponent} from "../../qualification-list/qualification-list.component";
 import {QualificationsApi} from "../../services/qualificationsApi";
+import {MenuComponent} from "../menu/menu.component";
 
 @Component({
   selector: 'app-qualifications-page',
   imports: [
-    QualificationListComponent
+    QualificationListComponent,
+    MenuComponent
   ],
   templateUrl: './qualifications-page.component.html',
   styleUrl: './qualifications-page.component.css',
 })
 export class QualificationsPageComponent {
-  qualifications : WritableSignal<Qualification[]>;
+  qualifications= signal<Qualification[]>([]);
 
   constructor(private qualificationsApi: QualificationsApi) {
-    this.qualifications = signal<Qualification[]>([]);
+    console.log("fetch");
     this.fetchQualifications();
   }
 

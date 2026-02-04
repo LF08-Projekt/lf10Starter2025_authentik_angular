@@ -5,6 +5,7 @@ import { CallbackComponent } from './callback/callback.component';
 import { authGuard } from './auth.guard';
 import { QualificationListComponent } from './qualification-list/qualification-list.component';
 import { EditEmployeeComponent } from './components/edit-employee/edit-employee.component';
+import {QualificationsPageComponent} from "./components/qualifications-page/qualifications-page.component";
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -13,6 +14,6 @@ export const routes: Routes = [
   { path: 'employees', component: EmployeeListComponent, canActivate: [authGuard] },
   { path: 'editEmployee', component: EditEmployeeComponent, canActivate: [authGuard] },
   { path: 'editEmployee/:id', component: EditEmployeeComponent, canActivate: [authGuard] },
-  { path: 'qualification', component: QualificationListComponent, canActivate: [authGuard] },
+  { path: 'qualification', component: QualificationsPageComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

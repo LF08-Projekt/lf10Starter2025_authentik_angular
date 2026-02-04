@@ -1,5 +1,6 @@
-<app-confirmation-popup/>
-<div class="container py-4">
+<div class="container-fluid py-4">
+  <app-confirmation-popup/>
+  <app-menu [askToLeave]="true" (onLeave)="attemptToLeave($event)" />
   <div class="row justify-content-center">
     <div class="col-12 col-lg-8">
 
