@@ -7,6 +7,7 @@ import { EmployeeService } from "../services/employee.service";
 import { QualificationsApi } from "../services/qualificationsApi";
 import { Qualification } from "../model/qualification";
 import { AuthService } from "../auth.service";
+import {MenuComponent} from "../components/menu/menu.component";
 
 // Filterfelder für die Erweiterte Suche
 interface FilterState {
@@ -21,7 +22,7 @@ interface FilterState {
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, Field],
+  imports: [CommonModule, Field, MenuComponent],
   templateUrl: './employee-list.component.html',
   styleUrl: './employee-list.component.css'
 })

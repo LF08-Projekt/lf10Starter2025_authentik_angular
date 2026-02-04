@@ -15,11 +15,12 @@ import {QualificationsApi} from "../../services/qualificationsApi";
 import {PostQualificationDTO} from "../../model/postQualificationDTO";
 import {QualificationDto} from "../../model/QualificationDto";
 import {ConfirmationPopupComponent} from "../../confirmation-popup/confirmation-popup.component";
+import {MenuComponent} from "../menu/menu.component";
 
 
 @Component({
   selector: 'app-edit-employee',
-  imports: [FormField, AsyncPipe, RouterLink, QualificationListComponent, QualificationsPageComponent, NgClass, ConfirmationPopupComponent],
+  imports: [FormField, AsyncPipe, RouterLink, QualificationListComponent, QualificationsPageComponent, NgClass, ConfirmationPopupComponent, MenuComponent],
   templateUrl: './edit-employee.component.html',
   styleUrl: './edit-employee.component.css',
 })
@@ -163,9 +164,13 @@ export class EditEmployeeComponent {
     })
   }
 
-  cancel() {
+  attemptToLeave(leaveFunc: () => void) {
     this.confirmationPopUp().showMessage("Sind Sie sicher, dass Sie ihre Änderungen verwerfen möchten?",
-      () => this.router.navigate(['/employees']));
+      leaveFunc);
+  }
+
+  cancel() {
+    this.attemptToLeave(() => this.router.navigate(['/employees']));
   }
   delete() {
     console.log(this.isNew());

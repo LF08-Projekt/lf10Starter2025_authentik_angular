@@ -1,14 +1,24 @@
 <app-confirmation-popup></app-confirmation-popup>
-<div class="container mt-5">
-  <div class="row justify-content-end mb-5">
+ <div class="row justify-content-end mb-3">
     <button type="button" class="btn btn-success col-2" (click)="startAddNewQualification()" >+ Qualifikation Anlegen</button>
   </div>
-  <table class="table table-bordered bg-white">
-    <thead class="table-secondary">
+  @if (error != "") {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ error }}
+      <button type="button" class="btn-close" (click)="error = '' " aria-label="Close"></button>
+    </div>
+  }
+  <div class="table-responsive text-center">
+
+  <table class="table table-striped table-hover">
+    <thead class="table-primary">
     <th>
       Qualifikation
     </th>
-    <th class="text-end">
+    <th>
+      <input #searchInput class="" placeholder="Suche..." type="text" (change)="filterQualifications(searchInput.value)" >
+    </th>
+    <th class="">
       Aktion
     </th>
     </thead>
@@ -16,31 +26,36 @@
       @if (addNewQualification) {
         <tr>
           <td>
-<!--            <input type="text" [formField]="newQualificationForm.skill" />-->
-            <app-combobox [options]="missingQualifications()" (valueChanged)="newSkillInputChanged($event)"/>
+            @if (employeeContext()) {
+              <app-combobox [options]="missingQualifications()" (valueChanged)="newSkillInputChanged($event)"/>
+            } @else {
+              <input type="text" [formField]="newQualificationForm.skill"/>
+            }
           </td>
-          <td class="text-end">
-            <button type="button" class="material-icons btn btn-sm btn-success me-3"
+          <td></td>
+          <td class="">
+            <button type="button" class="btn btn-sm btn-success me-3"
                     (click)="saveNew()">
-              save
+              <span class="material-icons">save</span>
             </button>
-            <button type="button" class="material-icons btn btn-sm btn-danger"
+            <button type="button" class="btn btn-sm btn-danger"
                     (click)="cancelNew()">
-              delete
+              <span class="material-icons">delete</span>
             </button>
           </td>
         </tr>
       }
-      @for (qualification of qualifications(); track qualification.id) {
+      @for (qualification of ( filteredQualifications.length != 0 ? filteredQualifications : qualifications()); track qualification.id) {
         @if (isEditQualification(qualification)) {
           <tr>
             <td>
               <input type="text" [formField]="qualificationForm.skill" />
             </td>
-            <td class="text-end">
-              <button type="button" class="material-icons btn btn-sm btn-success"
+            <td></td>
+            <td class="">
+              <button type="button" class="btn btn-sm btn-success"
                       (click)="saveEdit()">
-                save
+                <span class="material-icons">save</span>
               </button>
             </td>
           </tr>
@@ -49,16 +64,17 @@
           <td>
             {{qualification.skill}}
           </td>
-          <td class="text-end">
+          <td></td>
+          <td class="">
             @if (canUpdateQualifications()) {
-            <button type="button" class="material-icons btn btn-sm btn-warning"
+            <button type="button" class="btn btn-sm btn-warning"
                     (click)="startEdit(qualification)">
-              edit
+              <span class="material-icons">edit</span>
             </button>
             }
-            <button type="button" class="material-icons btn btn-sm btn-danger ms-3"
+            <button type="button" class="btn btn-sm btn-danger ms-3"
                     (click)="openDeletePopup(qualification)">
-              delete
+              <span class="material-icons">delete</span>
             </button>
           </td>
         </tr>

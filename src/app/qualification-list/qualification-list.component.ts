@@ -14,6 +14,7 @@ import {Qualification} from "../model/qualification";
 import {QualificationsDataService} from "../services/qualificationsData.service";
 import {FormField, form} from "@angular/forms/signals";
 import { ConfirmationPopupComponent } from "../confirmation-popup/confirmation-popup.component";
+import {setActiveConsumer} from "@angular/core/primitives/signals";
 import {catchError} from "rxjs";
 import {QualificationsApi} from "../services/qualificationsApi";
 import {MatFormField, MatLabel} from "@angular/material/input";
@@ -25,10 +26,6 @@ import {ComboboxComponent} from "../components/combobox/combobox.component";
   imports: [
     FormField,
     ConfirmationPopupComponent,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     ComboboxComponent
   ],
   templateUrl: './qualification-list.component.html',
@@ -42,6 +39,7 @@ export class QualificationListComponent {
 
   public qualifications = input.required<Qualification[]>();
   public canUpdateQualifications = input<boolean>(false);
+  public employeeContext = input<boolean>(true);
 
   protected missingQualifications = computed(() => {
     return this.allQualifications()
@@ -54,13 +52,15 @@ export class QualificationListComponent {
   public newQualification: WritableSignal<Qualification>;
   public addNewQualification = false;
   public popUpText =  signal("Das sollte hier nicht stehen");
+  public error = "";
+  public filteredQualifications: Qualification[] = [];
 
   public newQualificationEvent = output<Qualification>();
   public selectQualificationEvent = output<Qualification>();
   public updateQualificationEvent = output<Qualification>();
   public deleteQualificationEvent = output<Qualification>();
 
-  constructor(private qualificationsApi: QualificationsApi) {
+  constructor(private qualificationsApi: QualificationsApi, public qualificationsDataService: QualificationsDataService) {
     this.qualificationToEdit = signal({id: -1, skill: ""})
     this.qualificationForm = form(this.qualificationToEdit);
     this.newQualification = signal({id: -1, skill: ""})
@@ -83,7 +83,7 @@ export class QualificationListComponent {
   }
 
   startEdit(qualification: Qualification) {
-    this.qualificationToEdit = signal(qualification);
+    this.qualificationToEdit.set(qualification);
     this.qualificationForm.skill().value.set(qualification.skill)
     this.qualificationForm.id().value.set(qualification.id)
   }
@@ -116,19 +116,29 @@ export class QualificationListComponent {
   }
 
   saveNew() {
-    // this.newQualification().skill = this.newQualificationForm.skill().value();
-
     console.log(this.newQualification());
-
     const existing = this.allQualifications().find(q => q.skill === this.newQualification().skill);
     if (existing == undefined) {
       this.newQualificationEvent.emit(this.newQualification());
+      this.addNewQualification = false;
     }
     else {
       this.selectQualificationEvent.emit(existing);
     }
 
-    this.addNewQualification = false;
+    let qualificationExists: Boolean = false;
+    this.qualifications().map((qualification) => {
+      if (qualification.skill == this.newQualificationForm.skill().value()) {
+        qualificationExists = true
+      }
+    })
+    if (qualificationExists) {
+      this.error = "Es gibt bereits eine Qualification mit diesem Namen!"
+      return
+    }
+    this.newQualification().skill = this.newQualificationForm.skill().value();
+
+
     this.newQualificationForm.skill().value.set("")
   }
 
@@ -138,9 +148,17 @@ export class QualificationListComponent {
   }
 
   deleteQualification(qualificationToDelete: Qualification) {
-    const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
-    this.qualifications().splice(index, 1);
     this.deleteQualificationEvent.emit(qualificationToDelete);
+    this.qualificationsDataService.qualificationHasEmployees(qualificationToDelete).subscribe( (result) => {
+      if (result.employees.length === 0) {
+        this.qualificationsDataService.deleteQualification(qualificationToDelete);
+        const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
+        this.qualifications().splice(index, 1);
+        this.filteredQualifications = [];
+      } else {
+        this.error = "Es gibt noch Mitarbeiter mit dieser Qualifikation"
+      }
+    })
   }
 
   openDeletePopup(qualification: Qualification) {
@@ -149,6 +167,18 @@ export class QualificationListComponent {
 
   cancelNew() {
     this.confirmationPopUp().showMessage("Sicher das du das erstellen Abbrechen willst?", () => this.abortNew());
+  }
+
+  filterQualifications(searchWord: string) {
+    this.filteredQualifications = []
+    if (searchWord == "") {
+      return
+    }
+    this.qualifications().map( (qualification) => {
+      if (qualification.skill.toLowerCase().includes(searchWord.toLowerCase())) {
+        this.filteredQualifications.push(qualification);
+      }
+    })
   }
 
 }
