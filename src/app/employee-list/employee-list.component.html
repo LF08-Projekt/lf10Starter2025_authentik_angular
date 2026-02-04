@@ -1,8 +1,0 @@
-<h1>Mitarbeiterliste</h1>
-<ul>
-  @for(e of employees$ | async; track e.id) {
-    <li>
-      {{e.lastName }}, {{e.firstName}}
-    </li>
-  }
-</ul>

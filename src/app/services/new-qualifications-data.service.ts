@@ -1,19 +1,27 @@
+import {Injectable, output} from '@angular/core';
 import {Qualification} from "../model/qualification";
 import {QualificationsApi} from "./qualificationsApi";
-import {map} from "rxjs";
 import {toSignal} from "@angular/core/rxjs-interop";
-import {Injectable, output, Signal} from "@angular/core";
 
-@Injectable({providedIn: "root"})
-export class QualificationsDataService {
-  private qualifications
+@Injectable({
+  providedIn: 'root',
+})
+export class NewQualificationsDataService {
+  private qualifications: Qualification[];
 
+  public updatedQualifications = output<Qualification[]>();
   constructor(private qualificationApi: QualificationsApi) {
-    this.qualifications = toSignal(this.qualificationApi.getAllQualifications(), {initialValue: []})
+    this.qualifications = [];
+
+    this.qualificationApi.getAllQualifications().subscribe(array => { this.setQualifications(array); });
   }
 
   getQualifications() {
     return this.qualifications;
+  }
+  setQualifications(newQualifications: Qualification[]) {
+    this.qualifications = newQualifications;
+    this.updatedQualifications.emit(this.qualifications);
   }
 
   updateQualification(id: number, skill: string) {
@@ -27,5 +35,4 @@ export class QualificationsDataService {
   deleteQualification(qualificationToDelete: Qualification) {
     this.qualificationApi.deleteQualification(qualificationToDelete);
   }
-
 }
