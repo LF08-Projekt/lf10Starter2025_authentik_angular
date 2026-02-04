@@ -35,9 +35,9 @@
     <div class="position-relative">
       <button class="btn btn-outline-primary position-relative" (click)="toggleQualDropdown()">
         <i class="bi bi-funnel"></i> Filter
-        @if (activeFilters().skill) {
+        @if (activeFilters().skill.length > 0) {
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            1
+            {{ activeFilters().skill.length }}
           </span>
         }
       </button>
@@ -46,7 +46,7 @@
         <div class="qual-dropdown">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <small class="fw-bold">Qualifikation</small>
-            @if (activeFilters().skill) {
+            @if (activeFilters().skill.length > 0) {
               <button class="btn btn-sm btn-link p-0 text-danger" (click)="selectQualification('')">
                 <i class="bi bi-x-circle"></i> Zurücksetzen
               </button>
@@ -55,8 +55,8 @@
           @for (name of availableSkillNames(); track name) {
             <button
               class="btn btn-sm w-100 text-start mb-1"
-              [class.btn-primary]="activeFilters().skill === name"
-              [class.btn-outline-secondary]="activeFilters().skill !== name"
+              [class.btn-primary]="activeFilters().skill.includes(name)"
+              [class.btn-outline-secondary]="!activeFilters().skill.includes(name)"
               (click)="selectQualification(name)"
             >
               {{ name }}
@@ -88,7 +88,7 @@
     <!-- Keine Ergebnisse -->
     @if (filteredEmployees().length === 0) {
       <div class="alert alert-info text-center">
-        @if (textFilterCount() > 0 || activeFilters().skill) {
+        @if (textFilterCount() > 0 || activeFilters().skill.length > 0) {
           <p class="mb-3">Keine Mitarbeiter gefunden, die Ihren Filtern entsprechen.</p>
         } @else {
           <p class="mb-3">Keine Mitarbeiter vorhanden.</p>
@@ -164,13 +164,18 @@
           </div>
 
           <div class="mb-3">
+            <label for="filterStreet" class="form-label fw-bold">Straße</label>
+            <input type="text" class="form-control" id="filterStreet" [field]="filterForm.street" placeholder="z.B. Meta-Sattler-Straße" />
+          </div>
+
+          <div class="mb-3">
             <label for="filterCity" class="form-label fw-bold">Stadt</label>
-            <input type="text" class="form-control" id="filterCity" [field]="filterForm.city" placeholder="z.B. Berlin" />
+            <input type="text" class="form-control" id="filterCity" [field]="filterForm.city" placeholder="z.B. Bremen" />
           </div>
 
           <div class="mb-3">
             <label for="filterPostcode" class="form-label fw-bold">PLZ</label>
-            <input type="text" class="form-control" id="filterPostcode" [field]="filterForm.postcode" placeholder="z.B. 10115" />
+            <input type="text" class="form-control" id="filterPostcode" [field]="filterForm.postcode" placeholder="z.B. 28217" />
           </div>
 
         </div>
