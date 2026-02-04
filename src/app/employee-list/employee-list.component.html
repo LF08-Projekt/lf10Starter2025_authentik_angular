@@ -2,17 +2,7 @@
 
   <!-- Kopfzeile -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <div class="d-flex gap-2 align-items-center">
-      <button class="btn btn-outline-secondary" (click)="logout()">
-        <i class="bi bi-box-arrow-right"></i> Logout
-      </button>
-      <button class="btn btn-primary">
-        <i class="bi bi-people"></i> Mitarbeiter
-      </button>
-      <button class="btn btn-outline-primary" (click)="navigateToQualifications()">
-        <i class="bi bi-award"></i> Qualifikationen
-      </button>
-    </div>
+    <app-menu [currentPage]="'Mitarbeiter'"/>
     <button class="btn btn-success" (click)="navigateToAdd()">
       <i class="bi bi-plus-circle"></i> Mitarbeiter hinzufügen
     </button>

@@ -1,0 +1,17 @@
+<div class="d-flex gap-2 align-items-center">
+  <button class="btn btn-outline-secondary" (click)="logout()">
+    <i class="bi bi-box-arrow-right"></i> Logout
+  </button>
+  <button class="btn"
+          [class.btn-primary]="alreadyOnPage('Mitarbeiter')"
+          [class.btn-outline-primary]="!alreadyOnPage('Mitarbeiter')"
+          (click)="navigateToEmployees()">
+    <i class="bi bi-people"></i> Mitarbeiter
+  </button>
+  <button class="btn"
+          [class.btn-primary]="alreadyOnPage('Qualifikationen')"
+          [class.btn-outline-primary]="!alreadyOnPage('Qualifikationen')"
+          (click)="navigateToQualifications()">
+    <i class="bi bi-award"></i> Qualifikationen
+  </button>
+</div>
