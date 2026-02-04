@@ -11,6 +11,12 @@ export class ConfirmationPopupComponent {
   popUpText = "";
   dialog = viewChild.required<ElementRef>('confirmationDialoge')
   private confirmCallback?: () => void;
+  hasConfirmFunction (){
+    if (this.confirmCallback) {
+      return true;
+    }
+    else return false;
+  }
 
   showMessage(message: string,onConfirm?: () => void) {
     this.popUpText = message;

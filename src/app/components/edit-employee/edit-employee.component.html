@@ -151,12 +151,14 @@
                 Abbrechen
               </button>
 
-              <button
-                type="button"
-                class="btn btn-danger"
-                (click)="delete()">
-                Löschen
-              </button>
+              @if (!isNew()) {
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="delete()">
+                  Löschen
+                </button>
+              }
 
               <button
                 type="button"

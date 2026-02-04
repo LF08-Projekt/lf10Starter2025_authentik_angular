@@ -5,17 +5,27 @@
     </div>
   </div>
   <div class="row">
-    <div class="col">
-      <button class="btn btn-sm btn-danger"
-        (click)="confirmAction()">
-        Ja
-      </button>
-    </div>
-    <div class="col">
-      <button class="btn btn-sm btn-danger"
-      (click)="confirmationDialoge.close()">
-        Nein
-      </button>
-    </div>
+    @if (hasConfirmFunction()) {
+      <div class="col">
+        <button class="btn btn-sm btn-danger"
+          (click)="confirmAction()">
+          Ja
+        </button>
+      </div>
+      <div class="col">
+        <button class="btn btn-sm btn-danger"
+        (click)="confirmationDialoge.close()">
+          Nein
+        </button>
+      </div>
+    }
+    @else {
+      <div class="col">
+        <button class="btn btn-sm btn-danger"
+                (click)="confirmationDialoge.close()">
+          Ok
+        </button>
+      </div>
+    }
   </div>
 </dialog>

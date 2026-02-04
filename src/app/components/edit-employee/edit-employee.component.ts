@@ -1,5 +1,5 @@
 import {Component, computed, inject, signal, viewChild} from '@angular/core';
-import {form, FormField, required, email, pattern} from '@angular/forms/signals'
+import {form, FormField, required, email, pattern, maxLength} from '@angular/forms/signals'
 import {Employee} from "../../model/Employee";
 import {EmployeeService} from "../../services/employee.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -41,6 +41,16 @@ export class EditEmployeeComponent {
     });
     required(schemaPath.city, {message: "Ort muss ausgefüllt sein"});
     required(schemaPath.phone, {message: "Telefon muss ausgefüllt sein"});
+
+    maxLength(schemaPath.firstName, 50, { message: "Maximal 50 Zeichen erlaubt" });
+    maxLength(schemaPath.lastName, 50, { message: "Maximal 50 Zeichen erlaubt" });
+    maxLength(schemaPath.street, 50, { message: "Maximal 50 Zeichen erlaubt" });
+    maxLength(schemaPath.city, 50, { message: "Maximal 50 Zeichen erlaubt" });
+    maxLength(schemaPath.phone, 50, { message: "Maximal 50 Zeichen erlaubt" });
+
+    pattern(schemaPath.phone, /^(?:\+|\+?\d[\d ]*)$/, {
+      message: "Telefonnummer darf nur Zahlen, Leerzeichen und optional ein + am Anfang enthalten"
+    });
   });
   id: number = -1;
   unsavedChanges = false;
@@ -126,10 +136,10 @@ export class EditEmployeeComponent {
       error: (err) => {
         switch (err.error.message) {
           case "Postcode must have 5 characters":
-            this.confirmationPopUp().showMessage("Die PLZ muss aus 5 Nummern bestehen." , () => {});
+            this.confirmationPopUp().showMessage("Die PLZ muss aus 5 Nummern bestehen.");
             break;
           default:
-            this.confirmationPopUp().showMessage(err.error.message , () => {});
+            this.confirmationPopUp().showMessage(err.error.message);
             break;
         }
 
@@ -150,13 +160,13 @@ export class EditEmployeeComponent {
       error: (err) => {
         switch (err.error.message) {
           case "EmployeeEntity already exists":
-            this.confirmationPopUp().showMessage("Den angelegten Mitarbeiter gibt es bereits." , () => {});
+            this.confirmationPopUp().showMessage("Den angelegten Mitarbeiter gibt es bereits.");
             break;
           case "Postcode must have 5 characters":
-            this.confirmationPopUp().showMessage("Die PLZ muss aus 5 Nummern bestehen." , () => {});
+            this.confirmationPopUp().showMessage("Die PLZ muss aus 5 Nummern bestehen.");
             break;
           default:
-            this.confirmationPopUp().showMessage(err.error.message , () => {});
+            this.confirmationPopUp().showMessage(err.error.message);
             break;
         }
 
