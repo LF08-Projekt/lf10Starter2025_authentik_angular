@@ -11,8 +11,8 @@
         </div>
         <div class="modal-footer">
           @if (hasConfirmFunction()) {
-            <button type="button" class="btn btn-outline-secondary" (click)="close()">Nein</button>
             <button type="button" class="btn btn-danger" (click)="confirmAction()">Ja</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="close()">Nein</button>
           } @else {
             <button type="button" class="btn btn-primary" (click)="close()">Ok</button>
           }
