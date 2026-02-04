@@ -55,6 +55,7 @@ export class QualificationListComponent {
         output.push(qualification);
       }
     })
+    console.log(output);
     return output;
   });
   public filterText = signal<string>("");
