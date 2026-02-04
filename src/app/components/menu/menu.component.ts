@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../auth.service";
 
@@ -11,8 +11,10 @@ import {AuthService} from "../../auth.service";
   styleUrl: './menu.component.css',
 })
 export class MenuComponent {
-  canLeavePage = input<() => boolean>(() => true);
   currentPage = input<string>("");
+  askToLeave = input<boolean>(false);
+
+  onLeave = output<() => void>();
 
   constructor(private authService: AuthService, private router: Router) {
 
@@ -22,21 +24,39 @@ export class MenuComponent {
     return page === this.currentPage();
   }
 
-  logout(): void {
-    if (this.canLeavePage()) {
-      this.authService.logout();
+  attemptLogout() {
+    if (this.askToLeave()) {
+      this.onLeave.emit(() => this.logout());
+    }
+    else {
+      this.logout();
     }
   }
-
-  navigateToEmployees(): void {
-    if (this.canLeavePage()) {
-      this.router.navigate(['/employees']);
-    }
+  logout() {
+    this.authService.logout();
   }
 
-  navigateToQualifications(): void {
-    if (this.canLeavePage()) {
-      this.router.navigate(['/qualification']);
+  attemtNavigateToEmployees() {
+    if (this.askToLeave()) {
+      this.onLeave.emit(() => this.navigateToEmployees());
     }
+    else {
+      this.navigateToEmployees();
+    }
+  }
+  navigateToEmployees() {
+    this.router.navigate(['/employees']);
+  }
+
+  attemptNavigateToQualifications() {
+    if (this.askToLeave()) {
+      this.onLeave.emit(() => this.navigateToQualifications());
+    }
+    else {
+      this.navigateToQualifications();
+    }
+  }
+  navigateToQualifications() {
+    this.router.navigate(['/qualification']);
   }
 }
