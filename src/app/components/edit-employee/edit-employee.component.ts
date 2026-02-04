@@ -57,7 +57,7 @@ export class EditEmployeeComponent {
   attemptedSave = signal<boolean>(false);
 
   canSave = computed<boolean>(() => {
-      return this.employeeForm().invalid() && (this.employeeForm().touched() || this.attemptedSave());
+      return this.employeeForm().invalid() && (this.attemptedSave());
     }
   )
 
