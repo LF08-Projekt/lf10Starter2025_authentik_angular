@@ -1,0 +1,25 @@
+<table class="table table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Telephon</th>
+    <th>Adresse</th>
+    <th>Skills</th>
+    <th>Aktionen</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (employee of employees(); track $index) {
+        <tr>
+          <td>{{employee.getFullName()}}</td>
+          <td>{{employee.getFullPhoneNumber()}}</td>
+          <td>{{employee.getFullAddress()}}</td>
+          <td>{{employee.getFullSkillDescription()}}</td>
+          <td>
+            <button type="button" [routerLink]="['/editEmployee/', employee.id]">Bearbeiten</button>
+            <button type="button">Löschen</button>
+          </td>
+        </tr>
+    }
+  </tbody>
+</table>

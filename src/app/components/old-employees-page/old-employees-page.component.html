@@ -1,0 +1,4 @@
+<h1>Employees Page</h1>
+<input [value]="searchTerm()" (input)="searchTerm.set(($any($event.target).value))" placeholder="Suchen..."/>
+<button type="button" [routerLink]="['/editEmployee']">Neu</button>
+<app-employee-list [employees]="showedEmployess()"></app-employee-list>
