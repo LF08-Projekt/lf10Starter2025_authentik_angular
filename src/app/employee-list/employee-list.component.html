@@ -109,17 +109,19 @@
                 <td>{{ emp.street }}, {{ emp.postcode }} {{ emp.city }}</td>
                 <td>
                   @if (emp.skillSet && emp.skillSet.length > 0) {
-                    @for (skillName of getSkillNames(emp); track skillName) {
-                      <span class="badge bg-secondary">{{ skillName }}</span>
-                    }
+                    <div class="d-flex flex-wrap gap-1">
+                      @for (skillName of getSkillNames(emp); track skillName) {
+                        <span class="badge bg-secondary">{{ skillName }}</span>
+                      }
+                    </div>
                   } @else {
                     <span class="text-muted">-</span>
                   }
                 </td>
                 <td>
-                  <div class="btn-group" role="group">
-                    <button (click)="navigateToEdit(emp.id)" class="btn btn-sm btn-primary">Bearbeiten</button>
-                    <button (click)="deleteEmployee(emp)" class="btn btn-sm btn-danger">Löschen</button>
+                  <div class="d-flex gap-2">
+                    <button (click)="navigateToEdit(emp.id)" class="btn btn-sm btn-warning"><span class="material-icons">edit</span></button>
+                    <button (click)="deleteEmployee(emp)" class="btn btn-sm btn-danger"><span class="material-icons">delete</span></button>
                   </div>
                 </td>
               </tr>

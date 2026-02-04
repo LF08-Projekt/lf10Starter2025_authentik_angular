@@ -1,0 +1,13 @@
+.table-fixed {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.col-skill {
+  width: 80%;
+}
+
+.col-actions {
+  width: 20%;
+  white-space: nowrap;
+}

@@ -47,7 +47,6 @@ export class QualificationListComponent {
   public newQualification: WritableSignal<Qualification>;
   public addNewQualification = false;
   public popUpText =  signal("T-Pose");
-  public error = "";
   public filteredQualifications = computed(() => {
     let output: Qualification[] = [];
     this.qualifications().map((qualification) => {
@@ -146,7 +145,7 @@ export class QualificationListComponent {
 
     let qualificationExists= this.qualifications().find(q => q.skill === this.newQualification().skill);
     if (qualificationExists != undefined) {
-      this.error = "Es gibt bereits eine Qualifikation mit diesem Namen!"
+      this.confirmationPopUp().showMessage("Es gibt bereits eine Qualifikation mit diesem Namen!");
       return
     }
 
@@ -178,7 +177,7 @@ export class QualificationListComponent {
   }
 
   cancelNew() {
-    this.confirmationPopUp().showMessage("Wollen Sie das Erstellen wirklich abbrechen?", () => this.abortNew());
+    this.confirmationPopUp().showMessage("Wollen Sie das Erstellen der Qualifikation wirklich abbrechen?", () => this.abortNew());
   }
 
   protected readonly HTMLInputElement = HTMLInputElement;
