@@ -42,3 +42,5 @@ testem.log
 Thumbs.db
 src/app/employee-list/employee-list.component.html
 src/app/employee-list/employee-list.component.ts
+getBearerToken.http
+package-lock.json
