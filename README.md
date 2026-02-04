@@ -333,4 +333,7 @@ export class EmployeeListComponent {
 # Bugs
 
 Trage hier die Features ein, die nicht funktionieren. Beschreibe den jeweiligen Fehler. 
+- Beim Login-Screen kann man einen beliebigen Login und Passwort eingeben, und man wird immer zum oAuto-Login weitergeleitet.
+- Nach dem Abmelden muss man sich nicht nochmal in oAuth anmelden, man kann sich also wieder mit Quatsch anmelden
+  (- Uns ist das leider erst kurz vor Abgabe aufgefallen und das war der Part, den Henrik übernommen hat)
 
