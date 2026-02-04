@@ -1,31 +1,24 @@
 <dialog #confirmationDialoge class="popup--center">
-  <div class="row text-center">
-    <div class="col">
-      <p>{{popUpText}}</p>
-    </div>
+  <div class="text-center mb-3">
+    <p>{{popUpText}}</p>
   </div>
-  <div class="row">
+  <div class="d-flex justify-content-center gap-3">
     @if (hasConfirmFunction()) {
-      <div class="col">
-        <button class="btn btn-sm btn-danger"
-          (click)="confirmAction()">
-          Ja
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn btn-sm btn-danger"
-        (click)="confirmationDialoge.close()">
-          Nein
-        </button>
-      </div>
+      <button class="btn btn-sm btn-danger"
+        (click)="confirmAction()">
+        Ja
+      </button>
+
+      <button class="btn btn-sm btn-danger"
+      (click)="confirmationDialoge.close()">
+        Nein
+      </button>
     }
     @else {
-      <div class="col">
-        <button class="btn btn-sm btn-danger"
-                (click)="confirmationDialoge.close()">
-          Ok
-        </button>
-      </div>
+      <button class="btn btn-sm btn-danger"
+              (click)="confirmationDialoge.close()">
+        Ok
+      </button>
     }
   </div>
 </dialog>
