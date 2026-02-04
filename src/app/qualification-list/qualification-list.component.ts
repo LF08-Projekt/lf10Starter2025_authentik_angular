@@ -83,7 +83,7 @@ export class QualificationListComponent {
   }
 
   startEdit(qualification: Qualification) {
-    this.qualificationToEdit = signal(qualification);
+    this.qualificationToEdit.set(qualification);
     this.qualificationForm.skill().value.set(qualification.skill)
     this.qualificationForm.id().value.set(qualification.id)
   }

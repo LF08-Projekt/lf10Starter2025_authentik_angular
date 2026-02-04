@@ -20,13 +20,13 @@
             <app-combobox [options]="missingQualifications()" (valueChanged)="newSkillInputChanged($event)"/>
           </td>
           <td class="text-end">
-            <button type="button" class="material-icons btn btn-sm btn-success me-3"
+            <button type="button" class="btn btn-sm btn-success me-3"
                     (click)="saveNew()">
-              save
+              <span class="material-icons">save</span>
             </button>
-            <button type="button" class="material-icons btn btn-sm btn-danger"
+            <button type="button" class="btn btn-sm btn-danger"
                     (click)="cancelNew()">
-              delete
+              <span class="material-icons">delete</span>
             </button>
           </td>
         </tr>
@@ -38,9 +38,9 @@
               <input type="text" [formField]="qualificationForm.skill" />
             </td>
             <td class="text-end">
-              <button type="button" class="material-icons btn btn-sm btn-success"
+              <button type="button" class="btn btn-sm btn-success"
                       (click)="saveEdit()">
-                save
+                <span class="material-icons">save</span>
               </button>
             </td>
           </tr>
@@ -51,14 +51,14 @@
           </td>
           <td class="text-end">
             @if (canUpdateQualifications()) {
-            <button type="button" class="material-icons btn btn-sm btn-warning"
+            <button type="button" class="btn btn-sm btn-warning"
                     (click)="startEdit(qualification)">
-              edit
+              <span class="material-icons">edit</span>
             </button>
             }
-            <button type="button" class="material-icons btn btn-sm btn-danger ms-3"
+            <button type="button" class="btn btn-sm btn-danger ms-3"
                     (click)="openDeletePopup(qualification)">
-              delete
+              <span class="material-icons">delete</span>
             </button>
           </td>
         </tr>
