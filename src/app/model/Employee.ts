@@ -10,8 +10,8 @@ export class Employee {
               public phone: string,
               public skillSet: Qualification[] ) {
   }
-  public copy() {
-    return new Employee(this.id, this.lastName, this.firstName, this.street, this.postcode, this.city, this.phone, [...this.skillSet]);
+  public static Copy(employee: Employee) {
+    return new Employee(employee.id, employee.lastName, employee.firstName, employee.street, employee.postcode, employee.city, employee.phone, [...employee.skillSet]);
   }
 
   getFullName(): string {

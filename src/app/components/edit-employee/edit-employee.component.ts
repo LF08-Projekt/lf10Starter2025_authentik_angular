@@ -53,7 +53,7 @@ export class EditEmployeeComponent {
     });
   });
   id: number = -1;
-  unsavedChanges = false;
+  changedQualifications = signal<boolean>(false);
   attemptedSave = signal<boolean>(false);
 
   canSave = computed<boolean>(() => {
@@ -65,6 +65,9 @@ export class EditEmployeeComponent {
     return this.employeeForm.firstName;
   });
   isNew() { return this.id === -1; }
+  hasUnsavedChanges() {
+    return this.changedQualifications() || this.employeeForm().touched();
+  }
 
   constructor(private employeeService: EmployeeService,
               private qualificationsApi: QualificationsApi,
@@ -153,9 +156,7 @@ export class EditEmployeeComponent {
     this.employeeService.postEmployee(this.employee()).subscribe({
       next: (response) => {
         console.log('Response vom Backend:', response);
-
-        this.id = response.id;
-        this.employee.set(response);
+        this.router.navigate(['/employees']);
       },
       error: (err) => {
         switch (err.error.message) {
@@ -176,8 +177,13 @@ export class EditEmployeeComponent {
   }
 
   attemptToLeave(leaveFunc: () => void) {
-    this.confirmationPopUp().showMessage("Sind Sie sicher, dass Sie ihre Änderungen verwerfen möchten?",
-      leaveFunc);
+    if (this.hasUnsavedChanges()) {
+      this.confirmationPopUp().showMessage("Sind Sie sicher, dass Sie ihre Änderungen verwerfen möchten?",
+        leaveFunc);
+    }
+    else {
+      leaveFunc();
+    }
   }
 
   cancel() {
@@ -221,7 +227,8 @@ export class EditEmployeeComponent {
             console.log(newEntry);
             if (newEntry != undefined) {
               this.employee().skillSet.push(newEntry);
-              this.employee.set(this.employee().copy());
+              this.employee.set(Employee.Copy(this.employee()));
+              this.changedQualifications.set(true);
             }
           })
         }
@@ -231,12 +238,15 @@ export class EditEmployeeComponent {
   onSelectQualification(qualification: Qualification) {
     console.log("selected");
     this.employee().skillSet.push(qualification);
-    this.employee.set(this.employee().copy());
-    this.unsavedChanges = true;
+    var abc = this.employee();
+    this.employee.set(Employee.Copy(this.employee()));
+    console.log("changed" + (abc == this.employee()));
+    this.changedQualifications.set(true);
   }
 
   onDeleteQualification(qualification: Qualification) {
     this.employee().skillSet = this.employee().skillSet.filter(q => q.id != qualification.id);
-    this.employee.set(this.employee().copy());
+    this.employee.set(Employee.Copy(this.employee()));
+    this.changedQualifications.set(true);
   }
 }

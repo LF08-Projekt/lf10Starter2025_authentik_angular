@@ -46,7 +46,7 @@ export class QualificationListComponent {
   public newQualificationForm;
   public newQualification: WritableSignal<Qualification>;
   public addNewQualification = false;
-  public popUpText =  signal("Das sollte hier nicht stehen");
+  public popUpText =  signal("T-Pose");
   public error = "";
   public filteredQualifications = computed(() => {
     let output: Qualification[] = [];
@@ -108,11 +108,23 @@ export class QualificationListComponent {
 
   saveEdit() {
     this.qualificationToEdit().skill = this.qualificationForm.skill().value()
+    if (this.qualificationToEdit().skill.length > 50) {
+      this.confirmationPopUp().showMessage("Der Name einer Qualifikations darf nicht länger als 50 Zeichen sein!");
+      return
+    }
+    else if (this.newQualification().skill.length == 0) {
+      this.confirmationPopUp().showMessage("Es kann keine leere Qualifikation gespeichert werden!");
+      return
+    }
+
     const index = this.qualifications().findIndex(qualification => this.qualificationToEdit().id === qualification.id)
     this.qualifications()[index] = this.qualificationToEdit()
 
     this.updateQualificationEvent.emit(this.qualificationToEdit());
 
+    this.qualificationToEdit = signal({id: -1, skill: ""})
+  }
+  cancelEdit() {
     this.qualificationToEdit = signal({id: -1, skill: ""})
   }
 
@@ -123,10 +135,18 @@ export class QualificationListComponent {
 
   saveNew() {
     console.log(this.newQualification());
+    if (this.newQualification().skill.length > 50) {
+      this.confirmationPopUp().showMessage("Der Name einer Qualifikations darf nicht länger als 50 Zeichen sein!");
+      return
+    }
+    else if (this.newQualification().skill.length == 0) {
+      this.confirmationPopUp().showMessage("Es kann keine leere Qualifikation gespeichert werden!");
+      return
+    }
 
     let qualificationExists= this.qualifications().find(q => q.skill === this.newQualification().skill);
     if (qualificationExists != undefined) {
-      this.error = "Es gibt bereits eine Qualification mit diesem Namen!"
+      this.error = "Es gibt bereits eine Qualifikation mit diesem Namen!"
       return
     }
 
@@ -154,11 +174,11 @@ export class QualificationListComponent {
   }
 
   openDeletePopup(qualification: Qualification) {
-    this.confirmationPopUp().showMessage("Sicher das du das Löschen willst?", () => this.deleteQualification(qualification));
+    this.confirmationPopUp().showMessage("Wollen Sie die Qualifikation wirklich löschen?", () => this.deleteQualification(qualification));
   }
 
   cancelNew() {
-    this.confirmationPopUp().showMessage("Sicher das du das erstellen Abbrechen willst?", () => this.abortNew());
+    this.confirmationPopUp().showMessage("Wollen Sie das Erstellen wirklich abbrechen?", () => this.abortNew());
   }
 
   protected readonly HTMLInputElement = HTMLInputElement;
