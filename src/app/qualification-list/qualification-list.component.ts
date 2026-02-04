@@ -26,10 +26,6 @@ import {ComboboxComponent} from "../components/combobox/combobox.component";
   imports: [
     FormField,
     ConfirmationPopupComponent,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     ComboboxComponent
   ],
   templateUrl: './qualification-list.component.html',
@@ -43,6 +39,7 @@ export class QualificationListComponent {
 
   public qualifications = input.required<Qualification[]>();
   public canUpdateQualifications = input<boolean>(false);
+  public employeeContext = input<boolean>(true);
 
   protected missingQualifications = computed(() => {
     return this.allQualifications()
@@ -63,7 +60,7 @@ export class QualificationListComponent {
   public updateQualificationEvent = output<Qualification>();
   public deleteQualificationEvent = output<Qualification>();
 
-  constructor(private qualificationsApi: QualificationsApi) {
+  constructor(private qualificationsApi: QualificationsApi, public qualificationsDataService: QualificationsDataService) {
     this.qualificationToEdit = signal({id: -1, skill: ""})
     this.qualificationForm = form(this.qualificationToEdit);
     this.newQualification = signal({id: -1, skill: ""})
@@ -119,13 +116,11 @@ export class QualificationListComponent {
   }
 
   saveNew() {
-    // this.newQualification().skill = this.newQualificationForm.skill().value();
-
     console.log(this.newQualification());
-
     const existing = this.allQualifications().find(q => q.skill === this.newQualification().skill);
     if (existing == undefined) {
       this.newQualificationEvent.emit(this.newQualification());
+      this.addNewQualification = false;
     }
     else {
       this.selectQualificationEvent.emit(existing);
@@ -142,8 +137,8 @@ export class QualificationListComponent {
       return
     }
     this.newQualification().skill = this.newQualificationForm.skill().value();
-    this.qualificationsDataService.postNewQualification(this.newQualification().skill);
-    this.addNewQualification = false;
+
+
     this.newQualificationForm.skill().value.set("")
   }
 
@@ -153,12 +148,12 @@ export class QualificationListComponent {
   }
 
   deleteQualification(qualificationToDelete: Qualification) {
-    const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
-    this.qualifications().splice(index, 1);
     this.deleteQualificationEvent.emit(qualificationToDelete);
     this.qualificationsDataService.qualificationHasEmployees(qualificationToDelete).subscribe( (result) => {
       if (result.employees.length === 0) {
         this.qualificationsDataService.deleteQualification(qualificationToDelete);
+        const index = this.qualifications()?.findIndex(qualification => qualification.id === qualificationToDelete.id)
+        this.qualifications().splice(index, 1);
         this.filteredQualifications = [];
       } else {
         this.error = "Es gibt noch Mitarbeiter mit dieser Qualifikation"
