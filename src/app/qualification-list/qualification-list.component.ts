@@ -108,6 +108,10 @@ export class QualificationListComponent {
 
   saveEdit() {
     this.qualificationToEdit().skill = this.qualificationForm.skill().value()
+    if (this.qualificationToEdit().skill.length > 50) {
+      this.confirmationPopUp().showMessage("Qualifikations Name darf nicht länger als 50 zeichen sein!");
+      return
+    }
     const index = this.qualifications().findIndex(qualification => this.qualificationToEdit().id === qualification.id)
     this.qualifications()[index] = this.qualificationToEdit()
 
@@ -123,7 +127,10 @@ export class QualificationListComponent {
 
   saveNew() {
     console.log(this.newQualification());
-
+    if (this.newQualification().skill.length > 50) {
+      this.confirmationPopUp().showMessage("Qualifikations Name darf nicht länger als 50 zeichen sein!");
+      return
+    }
     let qualificationExists= this.qualifications().find(q => q.skill === this.newQualification().skill);
     if (qualificationExists != undefined) {
       this.error = "Es gibt bereits eine Qualification mit diesem Namen!"

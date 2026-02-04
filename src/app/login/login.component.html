@@ -3,7 +3,7 @@
     <h1>LF10 Employee Portal</h1>
     <p class="subtitle">Melden Sie sich an, um fortzufahren</p>
     
-    <form (ngSubmit)="onLogin()" class="login-form">
+    <form (submit)="$event.preventDefault(); onLogin()" class="login-form">
       <div class="form-group">
         <label for="username">Benutzername</label>
         <input 
@@ -30,7 +30,7 @@
         {{ errorMessage() }}
       </div>
 
-      <button type="button" (click)="onLogin()" class="login-button">
+      <button type="submit" class="login-button">
         Anmelden
       </button>
     </form>
